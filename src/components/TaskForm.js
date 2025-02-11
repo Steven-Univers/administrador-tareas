@@ -1,3 +1,5 @@
+// components/TaskForm.js
+
 import React, { useState } from "react";
 
 const TaskForm = ({ addTask }) => {
@@ -7,6 +9,9 @@ const TaskForm = ({ addTask }) => {
     status: "pending",
   });
 
+  const [error, setError] = useState("");
+
+  // Actualiza el estado según el name del input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask({
@@ -18,54 +23,53 @@ const TaskForm = ({ addTask }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newTask.title.trim() === "" || newTask.description.trim() === "") {
-      alert("Por favor, completa todos los campos.");
+      setError("Todos los campos son obligatorios.");
       return;
     }
     addTask(newTask);
     setNewTask({ title: "", description: "", status: "pending" });
+    setError("");
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm mb-6 p-4 border border-gray-200" // Borde sutil
-    >
-      <div className="space-y-4">
-        <div>
-          <label className="text-sm font-medium text-gray-600 block mb-1">
-            📝 Título
-          </label>
-          <input
-            type="text"
-            name="title"
-            placeholder="Ej: Comprar leche"
-            value={newTask.title}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-          />
-        </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {/* Campo para el título de la tarea */}
+      <label htmlFor="title" className="block text-gray-700 mb-1">
+        Título de la tarea:
+      </label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value={newTask.title}
+        onChange={handleInputChange}
+        placeholder="Ingresa el título"
+        className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+      />
 
-        <div>
-          <label className="text-sm font-medium text-gray-600 block mb-1">
-            📋 Descripción
-          </label>
-          <textarea
-            name="description"
-            placeholder="Ej: Descremada, 1 litro"
-            value={newTask.description}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none h-24 resize-none transition-all"
-          />
-        </div>
+      {/* Campo para la descripción */}
+      <label htmlFor="description" className="block text-gray-700 mb-1">
+        Descripción:
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        value={newTask.description}
+        onChange={handleInputChange}
+        placeholder="Ingresa la descripción"
+        className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+      ></textarea>
 
-        <button 
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-        >
-          <span className="text-lg">+</span>
-          ➕ Agregar Tarea
-        </button>
-      </div>
+      {/* Mostrar error si existe */}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* Botón para agregar la tarea */}
+      <button
+        type="submit"
+        className="!bg-[#16a34a] !border !border-black !text-white font-bold py-2 px-4 rounded hover:!bg-[#15803b] transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#15803b]"
+      >
+        ➕ Agregar Tarea
+      </button>
     </form>
   );
 };
